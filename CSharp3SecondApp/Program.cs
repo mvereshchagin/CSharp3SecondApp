@@ -1,4 +1,7 @@
-﻿using app = CSharp3SecondApp;
+﻿// using app = CSharp3SecondApp; //псевдоним
+// using System.IO; // подключение прсотранства имен
+using CSharp3SecondApp;
+using MyFileAccess = CSharp3SecondApp.FileAccess;
 
 //тип_возращаемого_значение название_функции()
 //{ }
@@ -274,5 +277,91 @@ void CalculateAndPrint()
 CalculateAndPrint();
 
 
-app.Gender gender = app.Gender.Male;
+//Gender gender = Gender.Female;
+//if(gender == Gender.Male)
+//{
 
+//}
+
+var gender = GetGender();
+Console.WriteLine(gender);
+
+if (gender == Gender.Male)
+    Console.WriteLine("You are a man");
+else
+    Console.WriteLine("You are a woman");
+
+//if((byte)gender == 1)
+//{
+
+//}
+
+Gender GetGender()
+{
+    do
+    {
+        Console.WriteLine("What is your gender? " +
+            "(Male / Female; male / female; m / f; M / F; 1 / 0)");
+        var strGender = Console.ReadLine();
+
+        Gender? gender = strGender switch
+        {
+            "Male" => Gender.Male,
+            "male" => Gender.Male,
+            "m" => Gender.Male,
+            "M" => Gender.Male,
+            "1" => Gender.Male,
+            "Female" => Gender.Female,
+            "female" => Gender.Female,
+            "f" => Gender.Female,
+            "F" => Gender.Female,
+            "0" => Gender.Female,
+            _ => null,
+        };
+        if (gender != null)
+            return gender.Value;
+
+        Console.WriteLine("Incorrect input. Please, try one more time");
+    }
+    while (true);
+}
+
+SetFileAccess("file.txt", MyFileAccess.Read, MyFileAccess.Read);
+
+void SetFileAccess(string path, params MyFileAccess[] fileAccesses)
+{
+
+}
+
+SetFileAccess2("file.txt", MyFileAccess.Read | MyFileAccess.Execute); // 0b0001 | 0b0100 = 0b0101 = 5 
+
+void SetFileAccess2(string path, MyFileAccess fileAccess)
+{
+    if((fileAccess & MyFileAccess.Read) == MyFileAccess.Read) // 0b0101 & 0b0001 = 0b0001
+        Console.WriteLine($"Set read for path \"{path}\"");
+
+    if ((fileAccess & MyFileAccess.Write) == MyFileAccess.Write) // 0b0101 & 0b0010 = 0b0001
+        Console.WriteLine($"Set write for path \"{path}\"");
+
+    if ((fileAccess & MyFileAccess.Execute) == MyFileAccess.Execute) // 0b0101 & 0b0100 = 0b0100
+        Console.WriteLine($"Set execute for path \"{path}\"");
+}
+
+void SetFileAccess3(string path, MyFileAccess fileAccess)
+{
+    if(fileAccess.HasFlag(MyFileAccess.Read))
+        Console.WriteLine($"Set read for path \"{path}\"");
+
+    if(fileAccess.HasFlag(MyFileAccess.Write))
+        Console.WriteLine($"Set write for path \"{path}\"");
+
+    if(fileAccess.HasFlag(MyFileAccess.Execute))
+        Console.WriteLine($"Set execute for path \"{path}\"");
+}
+
+Console.WriteLine(MyFileAccess.Read | MyFileAccess.Execute);
+
+Console.WriteLine("SetFileAccess3");
+SetFileAccess3("file.txt", MyFileAccess.Read | MyFileAccess.Execute);
+
+var color = MyColors.Red | MyColors.DarkCyan | MyColors.Brown;

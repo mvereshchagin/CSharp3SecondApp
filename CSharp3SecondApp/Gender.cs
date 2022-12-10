@@ -1,8 +1,8 @@
 ﻿namespace CSharp3SecondApp;
 
-enum Gender
+enum Gender : int // : int подразумевается
 {
-    Male,
-    Female
+    Male = 34,
+    Female = 100000
 }
 
